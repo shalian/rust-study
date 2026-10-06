@@ -1,0 +1,7 @@
+# Rust 编译产物
+target/
+*.exe
+*.pdb
+
+# Rust/Cargo 备份文件
+**/*.rs.bk
