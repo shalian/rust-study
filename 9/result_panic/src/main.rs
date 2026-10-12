@@ -3,7 +3,7 @@ use std::io::ErrorKind;
 
 use std::io
 use std::io::Read;
-use std::fs::File;
+use std::fs;
 
 fn main() {
     let f = File::open("hello.txt");
@@ -40,25 +40,27 @@ fn main() {
     // 失败时 panic 的简写：unwrap 和 expect
     // unwrap 返回 Ok 的值，如果 Err，则调用 panic!
     // let f = File::open("hello.txt").unwrap();
-    let f = File::open("hello.txt").expect("Problem opening the file");
-
-
-
-
-
-    // 传播错误
+    // let f = File::open("hello.txt").expect("Problem opening the file");
     
 }
 
 
+// main 函数的一个有效的返回值是 ()，另一个有效的返回值是 Result<T, E>
+// Box<dyn Error> 为使用 ? 时 main 允许返回的 “任何类型的错误”
+// fn main()  -> Result<(), Box<dyn Error>> {
+//     let f = File::open("hello.txt")?;
+//     Ok(())
+// }
+
+
 
 fn read_username_from_file() -> Result<String, io::Error> {
-    let f = File::open("hello.txt");
+    // let f = File::open("hello.txt");
 
-    let mut f = match f {
-        Ok(file) => file,
-        Err(error) => panic!("Error: {}", error),
-    };
+    // let mut f = match f {
+    //     Ok(file) => file,
+    //     Err(error) => panic!("Error: {}", error),
+    // };
 
 
     let mut s = String::new();
@@ -78,6 +80,13 @@ fn read_username_from_file() -> Result<String, io::Error> {
 
 
     // 简化写法
+    // 当 File::open 和 read_to_string 都成功时返回包含用户名 s 的 Ok 值
     File::open("hello.txt")?.read_to_string(&mut s)?;
     Ok(s)
+
+
+
+    // 使用 fs::read_to_string
+    // 它会打开文件、新建一个 String、读取文件的内容，并将内容放入 String，接着返回它
+    fs::read_to_string("hello.txt")
 }
